@@ -11,10 +11,6 @@ public class CarController : MonoBehaviour
 
     public TextMeshProUGUI SpeedTextMesh;
 
-    public float maxRPM;
-
-    public float totalPower;
-
     private Rigidbody rBody;
 
     private float horizontalInput;
@@ -36,12 +32,23 @@ public class CarController : MonoBehaviour
     [SerializeField] private Transform frontRightWheeTransform;
     [SerializeField] private Transform rearLeftWheelTransform;
     [SerializeField] private Transform rearRightWheelTransform;
-    internal bool engineLerp;
-    internal float engineRPM;
+
+
+    //public AudioSource engineIdleAudio;
+
+    public AudioSource engine;
+    public float topSpeed = 100;
+    public float currentSpeed = 0;
+    public float pitch;
+
+
 
     private void Start()
     {
         rBody = GetComponent<Rigidbody>();
+
+        engine = GetComponent<AudioSource>();
+
     }
 
     private void Update()
@@ -52,9 +59,17 @@ public class CarController : MonoBehaviour
     private void FixedUpdate()
     {
         GetInput();
+        PlayAudio();
         HandleMotor();
         HandleSteering();
         UpdateWheels();
+    }
+
+    private void PlayAudio()
+    {
+        currentSpeed = rBody.velocity.magnitude * 2.23f;
+        pitch = Mathf.Lerp(0, 1, currentSpeed / topSpeed);
+        engine.pitch = pitch * 0.5f;
     }
 
 
