@@ -11,7 +11,10 @@ public class CarController : MonoBehaviour
 
     public TextMeshProUGUI SpeedTextMesh;
 
-    private Rigidbody rBody;
+    public Rigidbody rBody;
+
+    public BoxCollider CarCollider;
+    public Vector3 respawnPoint = new Vector3(2.63f, 0f, 79.9f);
 
     private float horizontalInput;
     private float verticalInput;
@@ -41,6 +44,8 @@ public class CarController : MonoBehaviour
     public float currentSpeed = 0;
     public float pitch;
 
+    public TextMeshProUGUI Hint; 
+
 
 
     private void Start()
@@ -48,6 +53,8 @@ public class CarController : MonoBehaviour
         rBody = GetComponent<Rigidbody>();
 
         engine = GetComponent<AudioSource>();
+
+        CarCollider = GetComponent<BoxCollider>();
 
     }
 
@@ -58,6 +65,7 @@ public class CarController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        ShowHint();
         GetInput();
         PlayAudio();
         HandleMotor();
@@ -118,5 +126,23 @@ public class CarController : MonoBehaviour
 ;       wheelCollider.GetWorldPose(out pos, out rot);
         wheelTransform.rotation = rot;
         wheelTransform.position = pos;
+    }
+
+    private void ShowHint()
+    {
+        if (Input.GetKey(KeyCode.H))
+        {
+            Hint.text = "1 Move as far right as possible, check traffic, and signal a left turn." + " 2.Turn the steering wheel sharply to the left and move forward slowly. ..." +
+                        "3.Shift to reverse, turn your wheels sharply to the right, check traffic, and back your vehicle to the right curb, or edge of roadway.";
+            
+        }
+
+        if (Input.GetKey(KeyCode.Alpha0))
+        {
+            Hint.text = "";
+        }
+
+
+       
     }
 }
